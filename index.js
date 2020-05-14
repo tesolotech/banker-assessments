@@ -2,6 +2,10 @@ const express = require('express');
 
 const bodyParser = require('body-parser');
 
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerJSDoc = require('swagger-jsdoc');
+
 // create express app
 const app = express();
 
@@ -41,6 +45,26 @@ app.use((req,res,next)=>{
       }
       next();
 });
+
+//Swagger integration
+const options = {
+     definition: {
+     //   openapi: '3.0.0', // Specification (optional, defaults to swagger: '2.0')
+       info: {
+         title: 'Tesolo Tech', // Title (required)
+         version: '1.0.0', // Version (required)
+         servers:['http://localhost:5000']
+       },
+     },
+     // Path to the API docs
+     apis: ['./app/routes/*.js'],
+   };
+   
+   // Initialize swagger-jsdoc -> returns validated swagger spec in json format
+   const swaggerSpec = swaggerJSDoc(options);
+
+// Add swagger path/route
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.set('port', process.env.PORT || 3000);
 

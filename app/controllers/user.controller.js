@@ -101,6 +101,7 @@ exports.loginUser= (req,res,next) =>{
 
 // Delete User
 exports.userDelete = (req,res,next) =>{
+    console.log(req.params)
     User.remove({ _id: req.params.userId})
     .exec()
     .then(result =>{
@@ -131,9 +132,7 @@ exports.GetAllUser = (req,res) =>{
 
 //Get Single Users by id
 exports.GetUserById = (req,res) =>{
-    // console.log(req.params.userId)
-    console.log(req.params)
-    // console.log(req)
+    
     User.findById({ _id: req.params.userId})
     .exec()
     .then(result => {
@@ -149,18 +148,44 @@ exports.GetUserById = (req,res) =>{
 
 //Update Single Users by id
 exports.UpdateUserById = (req,res) =>{
-    User.findByIdAndUpdate({ _id: req.params.userId})
-    .exec()
-    .then(result => {
-        res.status(200).json({
-            message:'User Successfully Updated',
-            data:result
-        });
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while Updating users."
-        });
-    });
+
+    bcrypt.hash(req.body.password,10, (err,hash)=>{
+        if(err){
+           return res.status(500).json({
+                error:err
+            });
+        }else{
+            const dataModel = {
+                mobile : req.body.mobile,
+                password : hash
+            }
+            User.findByIdAndUpdate(req.params.userId,{$set:dataModel},{new: true} )
+            .exec()
+            .then(result => {
+                res.status(200).json({
+                    message:'User Successfully Updated',
+                    data:result
+                });
+            }).catch(err => {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while Updating users."
+                });
+            });
+
+        }
+    })
+    // User.findByIdAndUpdate({ _id: req.params.userId, mobile:req.body.mobile, new: true})
+    // .exec()
+    // .then(result => {
+    //     res.status(200).json({
+    //         message:'User Successfully Updated',
+    //         data:result
+    //     });
+    // }).catch(err => {
+    //     res.status(500).send({
+    //         message: err.message || "Some error occurred while Updating users."
+    //     });
+    // });
 };
 
 
