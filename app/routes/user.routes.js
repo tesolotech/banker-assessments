@@ -146,6 +146,7 @@ module.exports = (app) => {
 
     // Add new contact
     app.post('/api/addContact', users.AddContacts, checkAuth);
+    app.get('/api/message',users.GetMessage);
     
 }
 

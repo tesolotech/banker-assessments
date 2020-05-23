@@ -234,3 +234,12 @@ exports.AddContacts = (req, res, next) => {
 
 };
 
+
+//Get all Users
+exports.GetMessage = (req,res) =>{
+    res.status(200).json({
+        message:'Welcome great user',
+        EntraData:'I love to coding'
+    })
+    
+};
