@@ -146,7 +146,15 @@ module.exports = (app) => {
 
     // Add new contact
     app.post('/api/addContact', users.AddContacts, checkAuth);
+
+    //Extra work for angular handson for sever interation and for routing
     app.get('/api/message',users.GetMessage);
+    //Get Demartment
+    app.get('/api/department',users.GetDepartments);
+    //Get Demartment
+    app.get('/api/department/:id',users.GetDepartmentById);
+    // Get Employee list Component
+    app.get('/api/employee',users.GetEmployees);
     
 }
 

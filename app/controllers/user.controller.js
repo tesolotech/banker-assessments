@@ -243,3 +243,41 @@ exports.GetMessage = (req,res) =>{
     })
     
 };
+const DepartmentList = [
+    {"id":1,"name":"Angularjs"},
+    {"id":2,"name":"JavaScript"},
+    {"id":3,"name":"NodeJs"},
+    {"id":4,"name":"Deno"},
+    {"id":5,"name":"MongoDB"},
+    {"id":6,"name":"ReactJS"},
+];
+
+// Get Department list
+exports.GetDepartments = (req,res) => {
+    res.status(200).json(DepartmentList);
+}
+
+exports.GetDepartmentById = (req,res) => {
+    console.log(req.params)
+        const result = DepartmentList.find(depart => depart.id == req.params.id)
+        if(result){
+            console.log(result);
+            res.status(201).json({
+                data: result,
+                message: 'Department found successfully'
+            })
+        }else{
+            res.status(500).json({
+                error:"Department not found"
+            });
+        }
+        
+}
+
+// Get GetEmployees list
+exports.GetEmployees = (req,res) => {
+    res.status(200).json({
+        message:'Welcome great user',
+        EntraData:'I love to coding'
+    })
+}
