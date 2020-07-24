@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const checkAuth = require('../middleware/check_auth');
 const messagebird = require('messagebird')('hWkhOCG62llUZdGZMbjqQFADy');
 const Contact = require('../models/contact.model.js');
+const Person = require('../models/person.model.js');
 
 
 // Create and save user
@@ -236,7 +237,7 @@ exports.AddContacts = (req, res, next) => {
 
 
 //Get all Users
-exports.GetMessage = (req,res) =>{
+exports.GetMessage = (req, res) =>{
     res.status(200).json({
         message:'Welcome great user',
         EntraData:'I love to coding'
@@ -281,3 +282,39 @@ exports.GetEmployees = (req,res) => {
         EntraData:'I love to coding'
     })
 }
+
+
+// create person
+exports.RegisterPerson = (req, res, next) => {
+    Person.find({mobile:req.body.name})
+    .exec()
+    .then(user => {
+        if(user.length >=1){
+            return res.status(409).json({
+                message:"User Exists"
+            })
+        }else{
+            const person = new Person({
+                _id:new mongoose.Types.ObjectId(),
+                name:req.body.name,
+                age:req.body.age,
+                salary:req.body.salary,
+            });
+            person.save()
+            .then(result => {
+                console.log(result);
+                res.status(201).json({
+                    message: 'User created successfull'
+                })
+            })
+            .catch(err =>{
+                console.log(err);
+                res.status(500).json({
+                    error:err
+                });
+            });
+        }
+    })
+    .catch()
+
+};

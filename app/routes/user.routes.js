@@ -156,5 +156,8 @@ module.exports = (app) => {
     // Get Employee list Component
     app.get('/api/employee',users.GetEmployees);
     
+    // Add new person
+    app.post('/api/RegisterPerson', users.RegisterPerson);
+    
 }
 
